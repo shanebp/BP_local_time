@@ -1303,12 +1303,15 @@ class BP_Activity_List_Table extends WP_List_Table {
 		// Other plugins can filter which actions are shown
 		$actions = apply_filters( 'bp_activity_admin_comment_row_actions', array_filter( $actions ), $item );
 
+		// convert date_recorded to local time
+		$filtered_time = bp_core_local_time( $item['date_recorded'] );
+		
 		/* translators: 2: activity admin ui date/time */
-		printf( __( 'Submitted on <a href="%1$s">%2$s at %3$s</a>', 'buddypress' ), bp_get_root_domain() . '/' . bp_get_activity_root_slug() . '/p/' . $item['id'] . '/', date_i18n( get_option( 'date_format' ), strtotime( $item['date_recorded'] ) ), date_i18n( get_option( 'time_format' ), strtotime( $item['date_recorded'] ) ) );
+		printf( __( 'Submitted on <a href="%1$s">%2$s at %3$s</a>', 'buddypress' ), bp_get_root_domain() . '/' . bp_get_activity_root_slug() . '/p/' . $item['id'] . '/', date_i18n( get_option( 'date_format' ), $filtered_time ), date_i18n( get_option( 'time_format' ), $filtered_time ) );
 
 		// End timestamp
 		echo '</div>';
-
+		
 		// Get activity content - if not set, use the action
 		if ( ! empty( $item['content'] ) ) {
 			$content = apply_filters_ref_array( 'bp_get_activity_content_body', array( $item['content'] ) );

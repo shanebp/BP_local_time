@@ -313,6 +313,24 @@ function bp_core_current_time( $gmt = true ) {
 	return apply_filters( 'bp_core_current_time', $current_time );
 }
 
+
+/**
+ * Filters a timestamp to local time because bp_core_current_time uses $gmt = true
+ * $timestamp needs to be a datetime
+ *
+ * @package BuddyPress Core
+ * @since BuddyPress (1.7)
+ */
+function bp_core_local_time( $timestamp ) {
+
+	$item_time = strtotime( $timestamp );
+	$timeOffset = current_time('timestamp', $gmt = 1) - current_time('timestamp', $gmt = 0);
+	$filtered_time = $item_time - $timeOffset;
+
+	return apply_filters( 'bp_core_local_time', $filtered_time );
+}
+
+
 /**
  * Adds a feedback (error/success) message to the WP cookie so it can be
  * displayed after the page reloads.
